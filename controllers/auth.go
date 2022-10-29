@@ -1,8 +1,12 @@
 package userscontroller
 
 import (
+	"log"
+
 	"github.com/Puyodead1/fosscord-server-go/models"
 	userservices "github.com/Puyodead1/fosscord-server-go/services"
+	"github.com/Puyodead1/fosscord-server-go/utils/errors"
+	"github.com/Puyodead1/fosscord-server-go/utils/errors/httperror"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,6 +24,9 @@ type RegisterRequest struct {
 }
 
 // TODO: captcha
+// TODO: check if email is already registered
+// TODO: check if email is a valid email
+// TODO: password policy
 /*
 	POST /api/v9/auth/register
 	{
@@ -36,10 +43,16 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// check if the email already exists
+	if userservices.GetUserByEmail(req.Email).ID != "" {
+		c.JSON(400, errors.HTTPError{Code: int(httperror.JSONErrorInvalidFormBody), Message: "Email already exists"})
+		return
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	// TODO: proper error responses
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		log.Fatalf("[Registration] Failed to hash password: %v", err)
+		c.JSON(500, errors.HTTPError{Code: 500, Message: string(httperror.InternalServerError)})
 		return
 	}
 
@@ -54,16 +67,16 @@ func Register(c *gin.Context) {
 
 	// create the user in the database
 	if err := userservices.CreateUser(&user); err != nil {
-		// TODO: proper error responses
-		c.JSON(400, gin.H{"error": err.Error()})
+		log.Fatalf("[Registration] Failed to create user: %v", err)
+		c.JSON(500, errors.HTTPError{Code: 500, Message: string(httperror.InternalServerError)})
 		return
 	}
 
 	// generate a token
 	token, err := userservices.GenerateToken(user.ID)
 	if err != nil {
-		// TODO: proper error responses
-		c.JSON(400, gin.H{"error": err.Error()})
+		log.Fatalf("[Registration] Failed to generate user: %v", err)
+		c.JSON(500, errors.HTTPError{Code: 500, Message: string(httperror.InternalServerError)})
 		return
 	}
 
