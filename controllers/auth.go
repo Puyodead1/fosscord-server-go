@@ -4,6 +4,7 @@ import (
 	"github.com/Puyodead1/fosscord-server-go/models"
 	userservices "github.com/Puyodead1/fosscord-server-go/services"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterRequest struct {
@@ -18,7 +19,7 @@ type RegisterRequest struct {
 	Username              string `json:"username"`
 }
 
-// TODO: captcha required
+// TODO: captcha
 /*
 	POST /api/v9/auth/register
 	{
@@ -35,22 +36,36 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	// TODO: proper error responses
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
 	// create a user from the request body
 	user := models.User{
 		ID:            userservices.GenerateID(),
 		Username:      req.Username,
 		Email:         &req.Email,
-		Password:      req.Password, // TODO: hash the password
+		Password:      string(hashedPassword),
 		Discriminator: userservices.GenerateDiscriminator(),
 	}
 
 	// create the user in the database
 	if err := userservices.CreateUser(&user); err != nil {
+		// TODO: proper error responses
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	// TODO: return token
-	// return the user
-	c.JSON(200, user)
+	// generate a token
+	token, err := userservices.GenerateToken(user.ID)
+	if err != nil {
+		// TODO: proper error responses
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"token": token})
 }

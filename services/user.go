@@ -3,9 +3,11 @@ package userservices
 import (
 	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/Puyodead1/fosscord-server-go/initializers"
 	"github.com/Puyodead1/fosscord-server-go/models"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 // handles creating a user in the database
@@ -42,4 +44,19 @@ func GenerateDiscriminator() string {
 
 func GenerateID() string {
 	return initializers.Node.Generate().String()
+}
+
+func GenerateToken(id string) (string, error) {
+	iat := time.Now().UnixMilli()
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = id
+	claims["iat"] = iat
+
+	tokenString, err := token.SignedString(initializers.SecretKey)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }
