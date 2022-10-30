@@ -31,6 +31,20 @@ func GetUserByEmail(email string) models.User {
 	return user
 }
 
+// gets a user by their phone number
+func GetUserByPhone(phone string) models.User {
+	var user models.User
+	initializers.DB.Where("phone = ?", phone).First(&user)
+	return user
+}
+
+// gets a user by their email or phone number
+func GetUserByLogin(q string) models.User {
+	var user models.User
+	initializers.DB.Where("email = ? OR phone = ?", q, q).First(&user)
+	return user
+}
+
 // gets all users
 func GetUsers() []models.User {
 	var users []models.User

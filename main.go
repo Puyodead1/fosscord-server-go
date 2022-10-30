@@ -18,7 +18,10 @@ func main() {
 	Init()
 	r := gin.Default()
 
-	r.POST("/api/v9/auth/register", userscontroller.Register)
+	api := r.Group("/api/v9")
+
+	api.POST("auth/register", userscontroller.Register)
+	api.POST("auth/login", userscontroller.Login)
 
 	r.Run(":3000")
 }

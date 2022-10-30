@@ -8,6 +8,7 @@ const (
 	BASE_TYPE_MIN_LENGTH     FieldErrorCode = "BASE_TYPE_MIN_LENGTH"
 	BASE_TYPE_MAX_LENGTH     FieldErrorCode = "BASE_TYPE_MAX_LENGTH"
 	BASE_TYPE_REQUIRED       FieldErrorCode = "BASE_TYPE_REQUIRED"
+	INVALID_LOGIN            FieldErrorCode = "INVALID_LOGIN"
 )
 
 var ValidationErrors = map[string]FieldErrorCode{
@@ -24,6 +25,7 @@ var FieldErrorMessages = map[FieldErrorCode]string{
 	BASE_TYPE_MIN_LENGTH:     "Must be 6 or more in length.",
 	BASE_TYPE_MAX_LENGTH:     "Must be 72 or fewer in length.",
 	BASE_TYPE_REQUIRED:       "This field is required",
+	INVALID_LOGIN:            "Login or password is invalid.",
 }
 
 func (e FieldErrorCode) String() string {
