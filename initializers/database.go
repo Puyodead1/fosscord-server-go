@@ -18,4 +18,5 @@ func InitDatabase() {
 	}
 
 	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.UserSettings{})
 }

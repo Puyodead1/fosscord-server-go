@@ -128,12 +128,14 @@ func Register(c *gin.Context) {
 	}
 
 	// create a user from the request body
+	usersettings := models.UserSettings{}
 	user := models.User{
 		ID:            userservices.GenerateID(),
 		Username:      req.Username,
 		Email:         &req.Email,
 		Password:      string(hashedPassword),
 		Discriminator: userservices.GenerateDiscriminator(),
+		Settings:      &usersettings,
 	}
 
 	// create the user in the database
@@ -266,5 +268,5 @@ func Login(c *gin.Context) {
 	}
 
 	// TODO: user settings
-	c.JSON(200, gin.H{"token": token, "user_id": user.ID, "user_settings": nil})
+	c.JSON(200, gin.H{"token": token, "user_id": user.ID, "user_settings": user.Settings})
 }
