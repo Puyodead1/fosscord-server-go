@@ -4,12 +4,14 @@ import (
 	userscontroller "github.com/Puyodead1/fosscord-server-go/controllers"
 	"github.com/Puyodead1/fosscord-server-go/initializers"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Init() {
 	// Connect to database
 	initializers.InitDatabase()
 	initializers.InitSnowflake()
+	binding.Validator = new(initializers.DefaultValidator)
 }
 
 func main() {

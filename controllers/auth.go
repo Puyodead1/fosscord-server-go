@@ -10,24 +10,23 @@ import (
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/httperror"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/jsonerrors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterRequest struct {
-	CaptchaKey            string `json:"captcha_key"`
-	Consent               bool   `json:"consent"`
-	DOB                   string `json:"dob"`
-	Email                 string `json:"email"`
-	GiftCodeSkuId         string `json:"gift_code_sku_id"`
-	Invite                string `json:"invite"`
-	Password              string `json:"password"`
-	PromotionalEmailOptIn bool   `json:"promotional_email_opt_in"`
-	Username              string `json:"username"`
+	CaptchaKey            string `json:"captcha_key" binding:"ascii"`
+	Consent               bool   `json:"consent" binding:"boolean"`
+	DOB                   string `json:"dob" binding:"required,ascii"`
+	Email                 string `json:"email" binding:"required,email"`
+	GiftCodeSkuId         string `json:"gift_code_sku_id" binding:"ascii"`
+	Invite                string `json:"invite" binding:"ascii"`
+	Password              string `json:"password" binding:"required,printascii,min=8"` // TODO: password policy
+	PromotionalEmailOptIn bool   `json:"promotional_email_opt_in" binding:"boolean"`
+	Username              string `json:"username" binding:"required,ascii,min=2,max=32"`
 }
 
 // TODO: captcha
-// TODO: check if email is a valid email
-// TODO: password policy
 /*
 	POST /api/v9/auth/register
 	{
@@ -40,7 +39,24 @@ func Register(c *gin.Context) {
 	// validate the request body is RegisterRequest
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		e := errors.HTTPError{
+			Code:    int(jsonerrors.InvalidFormBody),
+			Message: jsonerrors.JSONErrorMessages[jsonerrors.InvalidFormBody],
+		}
+		errs := err.(validator.ValidationErrors)
+		for _, err := range errs {
+			e.Errors = &map[string]errors.FieldError{
+				err.Field(): {
+					EErrors: []errors.FieldErrorErrors{
+						{
+							Code:    err.Tag(),
+							Message: err.Error(),
+						},
+					},
+				},
+			}
+		}
+		c.JSON(400, e)
 		return
 	}
 
