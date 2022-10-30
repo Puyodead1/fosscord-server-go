@@ -6,7 +6,9 @@ import (
 	"github.com/Puyodead1/fosscord-server-go/models"
 	userservices "github.com/Puyodead1/fosscord-server-go/services"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors"
+	"github.com/Puyodead1/fosscord-server-go/utils/errors/fielderror"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/httperror"
+	"github.com/Puyodead1/fosscord-server-go/utils/errors/jsonerrors"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,7 +26,6 @@ type RegisterRequest struct {
 }
 
 // TODO: captcha
-// TODO: check if email is already registered
 // TODO: check if email is a valid email
 // TODO: password policy
 /*
@@ -45,7 +46,20 @@ func Register(c *gin.Context) {
 
 	// check if the email already exists
 	if userservices.GetUserByEmail(req.Email).ID != "" {
-		c.JSON(400, errors.HTTPError{Code: int(httperror.JSONErrorInvalidFormBody), Message: "Email already exists"})
+		c.JSON(400, errors.HTTPError{
+			Code:    int(jsonerrors.InvalidFormBody),
+			Message: jsonerrors.JSONErrorMessages[jsonerrors.InvalidFormBody],
+			Errors: &map[string]errors.FieldError{
+				"email": {
+					EErrors: []errors.FieldErrorErrors{
+						{
+							Code:    fielderror.EMAIL_ALREADY_REGISTERED.String(),
+							Message: fielderror.EMAIL_ALREADY_REGISTERED.Message(),
+						},
+					},
+				},
+			},
+		})
 		return
 	}
 

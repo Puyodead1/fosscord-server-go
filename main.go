@@ -18,5 +18,5 @@ func main() {
 
 	r.POST("/api/v9/auth/register", userscontroller.Register)
 
-	r.Run()
+	r.Run(":3000")
 }
