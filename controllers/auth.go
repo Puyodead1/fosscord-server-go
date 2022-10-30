@@ -79,6 +79,13 @@ func Register(c *gin.Context) {
 		}
 	}
 
+	// TODO: consent check
+	// TODO: captcha
+	// TODO: registration disabled check
+	// TODO: block proxies
+	// TODO: password policy
+	// TODO: guest/temp accounts when no password provided
+
 	// check if the email already exists
 	if userservices.GetUserByEmail(req.Email).ID != "" {
 		c.JSON(400, fcerrors.HTTPError{
@@ -97,6 +104,10 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
+
+	// TODO: underage check
+	// TODO: ratelimit
+	// TODO: add to guild if registered with invite
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
