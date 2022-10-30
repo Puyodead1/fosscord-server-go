@@ -29,9 +29,9 @@ type RegisterRequest struct {
 	Username              string `json:"username" binding:"required,ascii,min=2,max=32"`
 }
 
-// TODO: captcha
 /*
-	POST /api/v9/auth/register
+POST /api/v9/auth/register
+
 	{
 		"captcha_key": ["captcha-required"],
 		"captcha_sitekey": string,
