@@ -185,6 +185,10 @@ const (
 	MessageBlockedHarmful                    JSONError = 240000
 )
 
+func (e JSONError) Code() int {
+	return int(e)
+}
+
 var JSONErrorMessages = map[JSONError]string{
 	GeneralError:                             "Unknown error",
 	UnknownAccount:                           "Unknown account",

@@ -1,4 +1,4 @@
-package errors
+package fcerrors
 
 type HTTPError struct {
 	Code    int                    `json:"code"`

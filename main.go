@@ -9,7 +9,8 @@ import (
 	"path"
 	"strings"
 
-	userscontroller "github.com/Puyodead1/fosscord-server-go/controllers"
+	authcontroller "github.com/Puyodead1/fosscord-server-go/controllers/auth"
+	userscontroller "github.com/Puyodead1/fosscord-server-go/controllers/users"
 	"github.com/Puyodead1/fosscord-server-go/gateway"
 	"github.com/Puyodead1/fosscord-server-go/initializers"
 	"github.com/gin-gonic/gin"
@@ -26,6 +27,7 @@ func Init() {
 func StartAPI() {
 	log.Println("Starting API")
 	r := gin.Default()
+
 	r.StaticFile("/", "./client/login.html")
 
 	// Proxies assets to discord
@@ -70,8 +72,14 @@ func StartAPI() {
 
 	api := r.Group("/api/v9")
 
-	api.POST("auth/register", userscontroller.Register)
-	api.POST("auth/login", userscontroller.Login)
+	api.POST("auth/register", authcontroller.Register)
+	api.POST("auth/login", authcontroller.Login)
+	api.GET("/users/:id/affinities/guilds", userscontroller.GetGuildAffinities)
+	api.GET("/users/:id/affinities/users", userscontroller.GetUserAffinities)
+	api.GET("/users/:id/library", userscontroller.GetLibrary)
+	api.GET("/users/:id/billing/localized-pricing-promo", userscontroller.GetBillingLocalizedPricingPromo)
+	api.GET("/users/:id/billing/payment-sources", userscontroller.GetBillingPaymentSources)
+	api.GET("/users/:id/billing/country-code", userscontroller.GetBillingCountryCode)
 
 	r.Run(":3000")
 }
