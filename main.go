@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"log"
 	"net/http"
@@ -75,8 +76,40 @@ func StartAPI() {
 	r.Run(":3000")
 }
 
+func PatchAssets() {
+	log.Println("Patching assets")
+	// loop all .js files in ./client/cache
+	files, err := os.ReadDir("./client/cache")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range files {
+		if !strings.HasSuffix(file.Name(), ".js") {
+			continue
+		}
+
+		// read file
+		data, err := os.ReadFile("./client/cache/" + file.Name())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		data = bytes.ReplaceAll(data, []byte("e.isDiscordGatewayPlaintextSet=function(){0;return!1};"), []byte("e.isDiscordGatewayPlaintextSet = function() { return true };"))
+		data = bytes.ReplaceAll(data, []byte("//# sourceMappingURL="), []byte("//# disabledSourceMappingURL="))
+		data = bytes.ReplaceAll(data, []byte("https://fa97a90475514c03a42f80cd36d147c4@sentry.io/140984"), []byte("https://6bad92b0175d41a18a037a73d0cff282@sentry.thearcanebrony.net/12"))
+
+		// write file
+		err = os.WriteFile("./client/cache/"+file.Name(), data, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
 func main() {
 	Init()
+	// patch cached assets
+	PatchAssets()
 	// start the servers
 	go StartAPI()
 	gateway.Init()
