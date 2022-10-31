@@ -21,5 +21,5 @@ type User struct {
 	Verified          bool          `json:"verified" gorm:"type:bool;not null;default:false"`
 	Phone             *string       `json:"phone" gorm:"type:string"`
 	Password          string        `json:"password" gorm:"type:string;not null"`
-	Settings          *UserSettings `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID;references:ID"`
+	Settings          *UserSettings `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID;references:ID"`
 }

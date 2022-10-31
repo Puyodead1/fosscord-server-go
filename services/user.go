@@ -1,6 +1,7 @@
 package userservices
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -63,6 +64,13 @@ func DeleteUser(id string) {
 	initializers.DB.Preload("Settings").Delete(&user, id)
 }
 
+// get user settings
+func GetUserSettings(id string) models.UserSettings {
+	var settings models.UserSettings
+	initializers.DB.First(&settings, id)
+	return settings
+}
+
 // generates a random discriminator
 func GenerateDiscriminator() string {
 	return strconv.Itoa(0001 + rand.Intn(9999-0001))
@@ -75,11 +83,10 @@ func GenerateID() string {
 
 // generates a jwt token
 func GenerateToken(id string) (string, error) {
-	iat := time.Now().UnixMilli()
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["id"] = id
-	claims["iat"] = iat
+	claims["iat"] = time.Now().Unix()
 
 	tokenString, err := token.SignedString(initializers.SecretKey)
 	if err != nil {
@@ -87,4 +94,28 @@ func GenerateToken(id string) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+// verifies a jwt token
+func VerifyToken(tokenString string) (string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return initializers.SecretKey, nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	id := claims["id"].(string)
+
+	return id, nil
+}
+
+func GenerateSessionID() string {
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%x", key)
 }

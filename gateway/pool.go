@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"log"
 
+	userservices "github.com/Puyodead1/fosscord-server-go/services"
 	"github.com/gorilla/websocket"
+	"github.com/mitchellh/mapstructure"
 )
 
 type IncomingMessage struct {
@@ -42,7 +44,7 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			log.Println("Size of Connection Pool: ", len(pool.Clients))
 			log.Println(client)
-			packet := GatewayPayload{Op: 10, D: map[string]interface{}{"heartbeat_interval": 41250}}
+			packet := GatewayPayload{Op: GATEWAYOPCODE_HELLO.Value(), D: map[string]interface{}{"heartbeat_interval": 41250}}
 			client.Conn.WriteJSON(packet)
 			break
 		case client := <-pool.Unregister:
@@ -69,7 +71,59 @@ func (pool *Pool) Start() {
 				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_HEARTBEAT_ACK.Value()})
 				break
 			case GATEWAYOPCODE_IDENTIFY.Value():
-				log.Println("IDENTIFY")
+
+				identifyPayload := IdentifyPayload{}
+				mapstructure.Decode(payload.D, &identifyPayload) // TODO: validate the fields
+
+				id, err := userservices.VerifyToken(identifyPayload.Token)
+				if err != nil {
+					cm := websocket.FormatCloseMessage(AUTHENTICATION_FAILED.Value(), CloseCodeMessages[AUTHENTICATION_FAILED])
+					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+						log.Println(err)
+					}
+					message.Client.Conn.Close()
+					break
+				}
+
+				user := userservices.GetUserById(id)
+				if user.ID == "" {
+					cm := websocket.FormatCloseMessage(AUTHENTICATION_FAILED.Value(), CloseCodeMessages[AUTHENTICATION_FAILED])
+					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+						log.Println(err)
+					}
+					message.Client.Conn.Close()
+					break
+				}
+
+				sessionId := userservices.GenerateSessionID()
+				if sessionId == "" {
+					cm := websocket.FormatCloseMessage(UNKNOWN_ERROR.Value(), CloseCodeMessages[UNKNOWN_ERROR])
+					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+						log.Println(err)
+					}
+					message.Client.Conn.Close()
+					break
+				}
+
+				userSettings := userservices.GetUserSettings(id)
+				if userSettings.ID == "" {
+					cm := websocket.FormatCloseMessage(UNKNOWN_ERROR.Value(), CloseCodeMessages[UNKNOWN_ERROR])
+					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+						log.Println(err)
+					}
+					message.Client.Conn.Close()
+					break
+				}
+
+				readyPayload := ReadyEventPayload{
+					V:               9,
+					User:            user,
+					PrivateChannels: []interface{}{},
+					SessionID:       sessionId,
+					Guilds:          []interface{}{},
+					UserSettings:    &userSettings,
+				}
+				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_DISPATCH.Value(), T: "READY", D: readyPayload})
 				break
 			default:
 				log.Printf("Unknown OP Code: %d", payload.Op)
