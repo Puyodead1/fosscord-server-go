@@ -19,4 +19,7 @@ func InitDatabase() {
 
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.UserSettings{})
+	DB.AutoMigrate(&models.Channel{})
+	DB.AutoMigrate(&models.Guild{})
+	DB.AutoMigrate(&models.ReadState{})
 }

@@ -20,7 +20,7 @@ type GuildFolder struct {
 }
 
 type UserSettings struct {
-	ID                                string             `json:"-" gorm:"primaryKey"`
+	ID                                string             `json:"-" gorm:"primaryKey;unique"`
 	ActivityJoiningRestrictedGuildIDs string             `json:"activity_joining_restricted_guild_ids" gorm:"type:string[];not null;default:'[]'"`
 	ActivityRestrictedGuildIDs        string             `json:"activity_restricted_guild_ids" gorm:"type:string[];not null;default:'[]'"`
 	AFKTimeout                        int                `json:"afk_timeout" gorm:"type:int;default:3600"`

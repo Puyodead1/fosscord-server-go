@@ -44,7 +44,7 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			log.Println("Size of Connection Pool: ", len(pool.Clients))
 			log.Println(client)
-			packet := GatewayPayload{Op: GATEWAYOPCODE_HELLO.Value(), D: map[string]interface{}{"heartbeat_interval": 41250}}
+			packet := GatewayPayload{Op: GATEWAYOPCODE_HELLO.Value(), D: map[string]interface{}{"heartbeat_interval": 41250, "_trace": []string{"[\"localhost\",{\"micros\":0.0}]"}}}
 			client.Conn.WriteJSON(packet)
 			break
 		case client := <-pool.Unregister:
@@ -115,23 +115,55 @@ func (pool *Pool) Start() {
 					break
 				}
 
+				readStates := userservices.GetReadStates(id)
+				if readStates == nil {
+					cm := websocket.FormatCloseMessage(UNKNOWN_ERROR.Value(), CloseCodeMessages[UNKNOWN_ERROR])
+					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+						log.Println(err)
+					}
+					message.Client.Conn.Close()
+					break
+				}
+
+				readStateEntries := make([]any, len(readStates))
+				for i, readState := range readStates {
+					readStateEntries[i] = readState.ChannelID
+				}
+
+				empty := make([]any, 0)
+
 				readyPayload := ReadyEventPayload{
-					V:               9,
-					User:            user,
-					PrivateChannels: []interface{}{},
-					SessionID:       sessionId,
-					Guilds:          []interface{}{},
-					UserSettings:    &userSettings,
+					V:                9,
+					User:             user,
+					PrivateChannels:  empty,
+					SessionID:        sessionId,
+					Guilds:           empty,
+					UserSettings:     &userSettings,
+					Users:            &empty,
+					Experiments:      &empty,
+					GuildExperiments: &empty,
+					ReadState: &ReadyEventDataStruct1{
+						Entries: readStateEntries,
+						Version: 304128,
+						Partial: false,
+					},
+					UserGuildSettings: &ReadyEventDataStruct1{
+						Entries: empty,
+						Version: 642,
+						Partial: false,
+					},
+					ConnectedAccounts: &empty,
 				}
 				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_DISPATCH.Value(), T: "READY", D: readyPayload})
 				break
 			default:
 				log.Printf("Unknown OP Code: %d", payload.Op)
-				cm := websocket.FormatCloseMessage(UNKNOWN_OPCODE.Value(), CloseCodeMessages[UNKNOWN_OPCODE])
-				if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
-					log.Println(err)
-				}
-				message.Client.Conn.Close()
+				// TODO: uncomment when all opcodes are implemented
+				// cm := websocket.FormatCloseMessage(UNKNOWN_OPCODE.Value(), CloseCodeMessages[UNKNOWN_OPCODE])
+				// if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {
+				// 	log.Println(err)
+				// }
+				// message.Client.Conn.Close()
 				break
 			}
 		}

@@ -43,27 +43,34 @@ type IdentifyPayload struct {
 	ClientState IdentifyPayloadClientState `json:"client_state"`
 }
 
+// fuck do we call this?
+type ReadyEventDataStruct1 struct {
+	Entries []any `json:"entries"`
+	Partial bool  `json:"partial"`
+	Version int   `json:"version"`
+}
+
 type ReadyEventPayload struct {
-	V                     int                  `json:"v"`
-	User                  models.User          `json:"user"`
-	PrivateChannels       []interface{}        `json:"private_channels"` // TODO:
-	SessionID             string               `json:"session_id"`
-	Guilds                []interface{}        `json:"guilds"` // TODO:
-	AnalyticsToken        *string              `json:"analytics_token"`
-	ConnectedAccounts     *[]interface{}       `json:"connected_accounts"` // TODO:
-	Consents              *[]interface{}       `json:"consents"`           // TODO:
-	CountryCode           *string              `json:"country_code"`
-	FriendSuggestionCount *int                 `json:"friend_suggestion_count"`
-	GeoOrderedRtcRegions  *[]string            `json:"geo_ordered_rtc_regions"` // TODO:
-	Experiments           *[]interface{}       `json:"experiments"`             // TODO:
-	GuildExperiments      *[]interface{}       `json:"guild_experiments"`       // TODO:
-	GuildJoinRequests     *[]interface{}       `json:"guild_join_requests"`     // TODO:
-	Shard                 *[]int               `json:"shard"`                   // TODO:
-	UserSettings          *models.UserSettings `json:"user_settings"`
-	Relationships         *[]interface{}       `json:"relationships"`       // TODO:
-	ReadState             *[]interface{}       `json:"read_state"`          // TODO:
-	UserGuildSettings     *[]interface{}       `json:"user_guild_settings"` // TODO:
-	Application           *interface{}         `json:"application"`         // TODO:
-	MergedMembers         *[]interface{}       `json:"merged_members"`      // TODO:
-	Users                 *[]interface{}       `json:"users"`               // TODO:
+	V                     int                    `json:"v"`
+	User                  models.User            `json:"user"`
+	PrivateChannels       []any                  `json:"private_channels"` // TODO:
+	SessionID             string                 `json:"session_id"`
+	Guilds                []any                  `json:"guilds"` // TODO:
+	AnalyticsToken        *string                `json:"analytics_token"`
+	ConnectedAccounts     *[]any                 `json:"connected_accounts"` // TODO:
+	Consents              *[]any                 `json:"consents"`           // TODO:
+	CountryCode           *string                `json:"country_code"`
+	FriendSuggestionCount *int                   `json:"friend_suggestion_count"`
+	GeoOrderedRtcRegions  *[]string              `json:"geo_ordered_rtc_regions"` // TODO:
+	Experiments           *[]any                 `json:"experiments"`             // TODO:
+	GuildExperiments      *[]any                 `json:"guild_experiments"`       // TODO:
+	GuildJoinRequests     *[]any                 `json:"guild_join_requests"`     // TODO:
+	Shard                 *[]int                 `json:"shard"`                   // TODO:
+	UserSettings          *models.UserSettings   `json:"user_settings"`
+	Relationships         *[]any                 `json:"relationships"`       // TODO:
+	ReadState             *ReadyEventDataStruct1 `json:"read_state"`          // TODO:
+	UserGuildSettings     *ReadyEventDataStruct1 `json:"user_guild_settings"` // TODO:
+	Application           *interface{}           `json:"application"`         // TODO:
+	MergedMembers         *[]any                 `json:"merged_members"`      // TODO:
+	Users                 *[]any                 `json:"users"`               // TODO:
 }

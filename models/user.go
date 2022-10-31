@@ -1,7 +1,7 @@
 package models
 
 type User struct {
-	ID                string        `json:"id" gorm:"primaryKey"`
+	ID                string        `json:"id" gorm:"primaryKey;unique"`
 	Username          string        `json:"username" gorm:"type:string;not null"`
 	Avatar            *string       `json:"avatar" gorm:"type:string"`
 	AvatarDecoration  *string       `json:"avatar_decoration" gorm:"type:string"` // base64 encoded image

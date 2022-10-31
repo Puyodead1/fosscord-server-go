@@ -71,6 +71,13 @@ func GetUserSettings(id string) models.UserSettings {
 	return settings
 }
 
+// get read states for user
+func GetReadStates(id string) []models.ReadState {
+	var readStates []models.ReadState
+	initializers.DB.Where("user_id = ?", id).Find(&readStates)
+	return readStates
+}
+
 // generates a random discriminator
 func GenerateDiscriminator() string {
 	return strconv.Itoa(0001 + rand.Intn(9999-0001))
