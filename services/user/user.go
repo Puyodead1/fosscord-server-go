@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"time"
 
 	"github.com/Puyodead1/fosscord-server-go/initializers"
 	"github.com/Puyodead1/fosscord-server-go/models"
-	"github.com/golang-jwt/jwt/v4"
 )
 
 // handles creating a user in the database
@@ -86,36 +84,6 @@ func GenerateDiscriminator() string {
 // generates a snowflake id
 func GenerateID() string {
 	return initializers.Node.Generate().String()
-}
-
-// generates a jwt token
-func GenerateToken(id string) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = id
-	claims["iat"] = time.Now().Unix()
-
-	tokenString, err := token.SignedString(initializers.SecretKey)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
-}
-
-// verifies a jwt token
-func VerifyToken(tokenString string) (string, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return initializers.SecretKey, nil
-	})
-	if err != nil {
-		return "", err
-	}
-
-	claims := token.Claims.(jwt.MapClaims)
-	id := claims["id"].(string)
-
-	return id, nil
 }
 
 func GenerateSessionID() string {

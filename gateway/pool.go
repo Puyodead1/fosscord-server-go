@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"log"
 
-	userservices "github.com/Puyodead1/fosscord-server-go/services"
+	jwtservices "github.com/Puyodead1/fosscord-server-go/services/jwt"
+	userservices "github.com/Puyodead1/fosscord-server-go/services/user"
 	"github.com/gorilla/websocket"
 	"github.com/mitchellh/mapstructure"
 )
@@ -75,7 +76,7 @@ func (pool *Pool) Start() {
 				identifyPayload := IdentifyPayload{}
 				mapstructure.Decode(payload.D, &identifyPayload) // TODO: validate the fields
 
-				id, err := userservices.VerifyToken(identifyPayload.Token)
+				id, err := jwtservices.VerifyToken(identifyPayload.Token)
 				if err != nil {
 					cm := websocket.FormatCloseMessage(AUTHENTICATION_FAILED.Value(), CloseCodeMessages[AUTHENTICATION_FAILED])
 					if err := message.Client.Conn.WriteMessage(websocket.CloseMessage, cm); err != nil {

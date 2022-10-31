@@ -13,6 +13,7 @@ import (
 	userscontroller "github.com/Puyodead1/fosscord-server-go/controllers/users"
 	"github.com/Puyodead1/fosscord-server-go/gateway"
 	"github.com/Puyodead1/fosscord-server-go/initializers"
+	"github.com/Puyodead1/fosscord-server-go/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -74,12 +75,15 @@ func StartAPI() {
 
 	api.POST("auth/register", authcontroller.Register)
 	api.POST("auth/login", authcontroller.Login)
-	api.GET("/users/:id/affinities/guilds", userscontroller.GetGuildAffinities)
-	api.GET("/users/:id/affinities/users", userscontroller.GetUserAffinities)
-	api.GET("/users/:id/library", userscontroller.GetLibrary)
-	api.GET("/users/:id/billing/localized-pricing-promo", userscontroller.GetBillingLocalizedPricingPromo)
-	api.GET("/users/:id/billing/payment-sources", userscontroller.GetBillingPaymentSources)
-	api.GET("/users/:id/billing/country-code", userscontroller.GetBillingCountryCode)
+
+	apiProtected := r.Group("/api/v9")
+	apiProtected.Use(middleware.JwtAuthMiddleware())
+	apiProtected.GET("/users/:id/affinities/guilds", userscontroller.GetGuildAffinities)
+	apiProtected.GET("/users/:id/affinities/users", userscontroller.GetUserAffinities)
+	apiProtected.GET("/users/:id/library", userscontroller.GetLibrary)
+	apiProtected.GET("/users/:id/billing/localized-pricing-promo", userscontroller.GetBillingLocalizedPricingPromo)
+	apiProtected.GET("/users/:id/billing/payment-sources", userscontroller.GetBillingPaymentSources)
+	apiProtected.GET("/users/:id/billing/country-code", userscontroller.GetBillingCountryCode)
 
 	r.Run(":3000")
 }

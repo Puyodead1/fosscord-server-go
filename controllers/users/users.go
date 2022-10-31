@@ -1,6 +1,9 @@
 package userscontroller
 
 import (
+	"log"
+
+	"github.com/Puyodead1/fosscord-server-go/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +25,9 @@ func GetGuildAffinities(c *gin.Context) {
 	// 	c.JSON(400, fcerrors.HTTPError{Code: jsonerrors.UnknownUser.Code(), Message: jsonerrors.JSONErrorMessages[jsonerrors.UnknownUser]})
 	// 	return
 	// }
+	// get use rfrom content and cast
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
 
 	c.JSON(200, gin.H{"guild_affinities": []GuildAffinity{}})
 }
@@ -34,6 +40,8 @@ func GetUserAffinities(c *gin.Context) {
 	// 	c.JSON(400, fcerrors.HTTPError{Code: jsonerrors.UnknownUser.Code(), Message: jsonerrors.JSONErrorMessages[jsonerrors.UnknownUser]})
 	// 	return
 	// }
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
 
 	c.JSON(200, gin.H{"user_affinities": []UserAffinity{}})
 }
@@ -47,6 +55,9 @@ func GetLibrary(c *gin.Context) {
 	// 	return
 	// }
 
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
+
 	empty := make([]interface{}, 0)
 	c.JSON(200, empty)
 }
@@ -59,6 +70,8 @@ func GetBillingLocalizedPricingPromo(c *gin.Context) {
 	// 	c.JSON(400, fcerrors.HTTPError{Code: jsonerrors.UnknownUser.Code(), Message: jsonerrors.JSONErrorMessages[jsonerrors.UnknownUser]})
 	// 	return
 	// }
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
 
 	// TODO: country code
 
@@ -73,6 +86,8 @@ func GetBillingPaymentSources(c *gin.Context) {
 	// 	c.JSON(400, fcerrors.HTTPError{Code: jsonerrors.UnknownUser.Code(), Message: jsonerrors.JSONErrorMessages[jsonerrors.UnknownUser]})
 	// 	return
 	// }
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
 
 	empty := make([]interface{}, 0)
 	c.JSON(200, empty)
@@ -86,6 +101,8 @@ func GetBillingCountryCode(c *gin.Context) {
 	// 	c.JSON(400, fcerrors.HTTPError{Code: jsonerrors.UnknownUser.Code(), Message: jsonerrors.JSONErrorMessages[jsonerrors.UnknownUser]})
 	// 	return
 	// }
+	user := c.MustGet("CurrentUser").(models.User)
+	log.Println(user.ID)
 
 	// TODO: country code
 

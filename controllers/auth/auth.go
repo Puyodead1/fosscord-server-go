@@ -6,7 +6,8 @@ import (
 	"log"
 
 	"github.com/Puyodead1/fosscord-server-go/models"
-	userservices "github.com/Puyodead1/fosscord-server-go/services"
+	jwtservices "github.com/Puyodead1/fosscord-server-go/services/jwt"
+	userservices "github.com/Puyodead1/fosscord-server-go/services/user"
 	fcerrors "github.com/Puyodead1/fosscord-server-go/utils/errors"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/fielderror"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/httperror"
@@ -146,7 +147,7 @@ func Register(c *gin.Context) {
 	}
 
 	// generate a token
-	token, err := userservices.GenerateToken(user.ID)
+	token, err := jwtservices.GenerateToken(user.ID)
 	if err != nil {
 		log.Fatalf("[Registration] Failed to generate user: %v", err)
 		c.JSON(500, fcerrors.HTTPError{Code: 500, Message: string(httperror.InternalServerError)})
@@ -260,7 +261,7 @@ func Login(c *gin.Context) {
 	// TODO: mfa
 
 	// generate a token
-	token, err := userservices.GenerateToken(user.ID)
+	token, err := jwtservices.GenerateToken(user.ID)
 	if err != nil {
 		log.Fatalf("[Registration] Failed to generate user: %v", err)
 		c.JSON(500, fcerrors.HTTPError{Code: 500, Message: string(httperror.InternalServerError)})
