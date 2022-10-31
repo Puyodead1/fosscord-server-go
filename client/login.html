@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8" />
+      <meta content="width=device-width, initial-scale=1.0, maximum-scale=3.0" name="viewport" />
+      <!-- section:seometa -->
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Discord" />
+      <meta property="og:title" content="Discord Test Client" />
+      <meta
+         property="og:description"
+         content="Discord is the easiest way to communicate over voice, video, and text.  Chat, hang out, and stay close with your friends and communities." />
+      <meta property="og:image" content="undefined//canary.discord.com/assets/652f40427e1f5186ad54836074898279.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@discord" />
+      <meta name="twitter:creator" content="@discord" />
+      <!-- endsection --><script nonce="MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1">window.GLOBAL_ENV = {
+         API_ENDPOINT: '/api',
+         API_VERSION: 9,
+         GATEWAY_ENDPOINT: 'ws://localhost:3001',
+         WEBAPP_ENDPOINT: '//localhost:3000',
+         CDN_HOST: 'localhost:3001',
+         ASSET_ENDPOINT: '//localhost:3000',
+         MEDIA_PROXY_ENDPOINT: '//localhost:3000',
+         WIDGET_ENDPOINT: '//localhost:3000/widget',
+         INVITE_HOST: 'localhost:3000',
+         GUILD_TEMPLATE_HOST: 'localhost:3000',
+         GIFT_CODE_HOST: 'localhost:3000',
+         RELEASE_CHANNEL: 'staging',
+         MARKETING_ENDPOINT: '//localhost:3000',
+         BRAINTREE_KEY: 'production_5st77rrc_49pp2rp4phym7387',
+         STRIPE_KEY: 'pk_live_CUQtlpQUF0vufWpnpUmQvcdi',
+         NETWORKING_ENDPOINT: '//localhost:3000',
+         RTC_LATENCY_ENDPOINT: '//localhost:3000/rtc',
+         ACTIVITY_APPLICATION_HOST: 'localhost:3000',
+         PROJECT_ENV: 'staging',
+         REMOTE_AUTH_ENDPOINT: '//localhost:3003',
+         SENTRY_TAGS: {"buildId":"ee3369bfca9f59b80e86fdaef09ed6e9a70d7029","buildType":"normal"},
+         MIGRATION_SOURCE_ORIGIN: 'http://localhost:3000',
+         MIGRATION_DESTINATION_ORIGIN: 'http://localhost:3000',
+         HTML_TIMESTAMP: Date.now(),
+         ALGOLIA_KEY: 'aca0d7082e4e63af5ba5917d5e96bed0',
+         };
+      </script><script nonce="MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1">!function(){if(null!=window.WebSocket){if(function(n){try{var e=localStorage.getItem(n);return null==e?null:JSON.parse(e)}catch(n){return null}}("token")&&!window.__OVERLAY__){var n=null!=window.DiscordNative||null!=window.require?"etf":"json",e=window.GLOBAL_ENV.GATEWAY_ENDPOINT+"/?encoding="+n+"&v="+window.GLOBAL_ENV.API_VERSION+"&compress=zlib-stream";console.log("[FAST CONNECT] connecting to: "+e);var o=new WebSocket(e);o.binaryType="arraybuffer";var t=Date.now(),i={open:!1,identify:!1,gateway:e,messages:[]};o.onopen=function(){console.log("[FAST CONNECT] connected in "+(Date.now()-t)+"ms"),i.open=!0},o.onclose=o.onerror=function(){window._ws=null},o.onmessage=function(n){i.messages.push(n)},window._ws={ws:o,state:i}}}}();</script>
+      <link rel="prefetch" as="script" href="/assets/06949ac7f3046989d886.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/6035eaba0cab2788d4f5.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/96315bca7e58c7f86fe9.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/005c709298b5eaea0db1.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/7cac7069e7c1e5dc8d0b.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/f4c4789de663acfddc03.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/40077a2ea29571c8fdff.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/511613388dc26bd24ef3.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/e948f6857bd5d73d170f.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/8ac2eec0ada1ed031caf.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/9e462c72a157f435b60f.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/f3ce63944c19984009ee.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/af55ae632902e3efd427.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/69ba7bde9854a7b7c189.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/327e31c86e028cd5a55e.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/b535315dafa3636ee1f2.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/9acc21c3536b34f7463a.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/f7c3e1f5fc56ee837097.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/32885778c6eedc7cd5f7.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/b6f628d3bb6ee614948a.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/90d249efca85626ed7cb.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/480e4aeec3c1e08639f3.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/df76d59fa83e2eeeaa5e.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/864b36cc5f93821f7233.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/e0d6698c620da720f485.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/0620050c6838402d5368.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/0340f33bbf555c512d44.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/7f9c55453d0cc7a12025.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/bd6ff5fa77f16617f934.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/62653af85cc35a6d0cfd.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/1332dba1c95663edbc9c.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/0ce67f823c42ed164f6e.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/8fd1562a6308413264e2.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/541df4d77cbc0e6c5f1a.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/035ca4cd0776dbfb10d9.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/e9098cf4ab3f4af95bc6.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/7c62e60296f7b962cf85.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/415e21515f31f8525e9d.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/ec65824a5df361039fe5.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/b603c2619b9788364daa.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/df3da72b8e75d7ce23a0.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/e4479b19b4b91dfc97e5.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/b1730d6eefa439d48506.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/f4fd843a1f417e4f2280.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/a677b9ddd69c798b09b4.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/31cb67564e57451dffd2.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/0fe1a7448e52bed5c10c.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/6f546265255deae2a7cf.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/d55c62dfd9dbdf0ec07a.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/9c61603674b889ce2bfb.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/b959da18c0cc1be529d7.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/86e7389d0665ab7a2c2c.js">
+      </link>
+      <link rel="prefetch" as="script" href="/assets/66ee51f8d99ab3815ecc.js">
+      </link>
+      <link rel="stylesheet" href="/assets/40532.fde962cf34effe2d22b1.css" integrity="sha256-Ci31qB/+66+AHqinEIpEmCdnHOMXC3GC2wSYG91Sk0c= sha512-FIuQBTAGPzxbm3ZLaCcy4D7KIWAv23vnICs9bL/R7tRS3IGLZDaKXWhDiS19hmag68Ic7rYVBdr35ABUMHaWBw==">
+      <link rel="icon" href="/assets/ec2c34cadd4b5f4594415127380a85e6.ico" />
+      <!-- section:title -->
+      <title>Discord Test Client</title>
+      <!-- endsection -->
+   </head>
+   <body>
+      <div id="app-mount"></div>
+      <script nonce="MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1">window.__OVERLAY__ = /overlay/.test(location.pathname)</script><script nonce="MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1">window.__BILLING_STANDALONE__ = /^\/billing/.test(location.pathname)</script><script src="/assets/13b3462842152fec9ffd.js" integrity="sha256-CejuoiV+kXv80wSkDSSMgO0tEnpLu8f00ktQHpnXP48= sha512-KNdEm/COZCxxCn58N76tRXI98mvN1GmhtxFyFDIc4uDRhUB5t64NcxOgoB4uhzZ7+sm2FEMG4JGbm5hoZnHZYQ=="></script><script src="/assets/06949ac7f3046989d886.js" integrity="sha256-TKL8xQWtkt0BmAonmEH87mQrXQyKaEP7TzD4nHPU9Lk= sha512-/iLWt4rDcJkIcHFUV1G5GcSGeQmF12RrWizIubwueQc0A9PJdkaBsZS2Ea1qfI6YwHT1JhkIReNYvG2li4Ye/Q=="></script><script src="/assets/76c3c34d9af60f1cdf98.js" integrity="sha256-RIgRi1XGUgGY1uOV7SroYs8BqTEzBeMzSFM+5FQQaSs= sha512-QE3aGRQe4EplUxdTumVD+dXHL5zuYiVCm7oc8ZNeZndG0/gLpQcY5BkmUQL+AA3OidXUPLAo6Z5ZuZGa6vgmYw=="></script><script src="/assets/46c2f3316ab052dde3a6.js" integrity="sha256-5Kf+sMxc8XF6luIpUxZK/phb0GAgkV2SBCxu9G2Ojjw= sha512-bPFpeB6/ZCgQFaRfSAtynIRSBrgq8fVBoAN06fqpC+6+73vtFfu81Wc8y9xSUOIWLa8VQsw4xFTmKON8rVfhwQ=="></script>  <script nonce="MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1">(function(){var js = "window['__CF$cv$params']={r:'7627ea95bac62928',m:'VEcnpIE2XR5iKtoJYO1_DeOEHVWJPg9Vc_pMYXalZog-1667172391-0-AeV5/xyVqMGZ0FqHbLJm0fvd4shHQrv3t+I3SYEJMosX/14ObF/84MeE4ifBnHgVnz0P79wEcs1AhKOQVENT4Rqqkx+XEBfmuRP7WQ2JVnr7IaWWjapiKv5ToxxDZ0qACQ==',s:[0xfbb2446f46,0x8c98cd0fac],u:'/cdn-cgi/challenge-platform/h/b'};var now=Date.now()/1000,offset=14400,ts=''+(Math.floor(now)-Math.floor(now%offset)),_cpo=document.createElement('script');_cpo.nonce='MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1',_cpo.src='/cdn-cgi/challenge-platform/h/b/scripts/alpha/invisible.js?ts='+ts,document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.nonce = 'MjAwLDEzMywwLDEwNywxNzYsNywxNTksMTA1';_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();</script>
+   </body>
+</html>
