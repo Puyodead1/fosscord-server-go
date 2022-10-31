@@ -1,9 +1,12 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path"
+	"strings"
 
 	userscontroller "github.com/Puyodead1/fosscord-server-go/controllers"
 	"github.com/Puyodead1/fosscord-server-go/gateway"
@@ -26,16 +29,38 @@ func StartAPI() {
 
 	// Proxies assets to discord
 	r.Any("/assets/:file", func(c *gin.Context) {
-		path := c.Request.URL.Path
-		resp, err := http.Get("https://canary.discord.com" + path)
+		// serve cached files if they exist
+		filename := path.Base(c.Request.URL.String())
+		filename = strings.Split(filename, "?")[0] // remove query string
+
+		if _, err := os.Stat("./client/cache/" + filename); !os.IsNotExist(err) {
+			c.File("./client/cache/" + filename)
+			return
+		}
+
+		resp, err := http.Get("https://canary.discord.com" + c.Request.URL.Path)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
 		}
 
 		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		err = os.MkdirAll("./client/cache", 0644)
+		if err != nil {
+			log.Printf("Error creating cache folder: %s", err.Error())
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+
+		// write to cache file
+		err = os.WriteFile("./client/cache/"+filename, body, 0644)
+		if err != nil {
+			log.Printf("Error writing file: %s", err.Error())
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
 		}

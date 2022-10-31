@@ -1,3 +1,4 @@
 *.exe
 *.db
 config.json
+client/cache/
