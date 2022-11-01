@@ -21,5 +21,6 @@ func InitDatabase() {
 	DB.AutoMigrate(&models.UserSettings{})
 	DB.AutoMigrate(&models.Channel{})
 	DB.AutoMigrate(&models.Guild{})
+	DB.AutoMigrate(&models.Member{})
 	DB.AutoMigrate(&models.ReadState{})
 }

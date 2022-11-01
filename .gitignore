@@ -1,4 +1,4 @@
 *.exe
 *.db
 config.json
-client/cache/
+static/cache/

@@ -62,6 +62,7 @@ func TokenValid(c *gin.Context) error {
 	}
 
 	c.Set("CurrentUser", user)
+	c.Set("CurrentUserID", user.ID)
 	return nil
 }
 

@@ -43,15 +43,17 @@ func (pool *Pool) Start() {
 		select {
 		case client := <-pool.Register:
 			pool.Clients[client] = true
+			client.Events = make(map[string]func())
+			client.MemberEvents = make(map[string]func())
+			client.Sequence = 0
+
 			log.Println("Size of Connection Pool: ", len(pool.Clients))
 			log.Println(client)
 			packet := GatewayPayload{Op: GATEWAYOPCODE_HELLO.Value(), D: map[string]interface{}{"heartbeat_interval": 41250, "_trace": []string{"[\"localhost\",{\"micros\":0.0}]"}}}
 			client.Conn.WriteJSON(packet)
-			break
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			log.Println("Size of Connection Pool: ", len(pool.Clients))
-			break
 		case message := <-pool.Message:
 			payload := GatewayPayload{}
 			// unmarshal message into payload
@@ -70,7 +72,6 @@ func (pool *Pool) Start() {
 			case GATEWAYOPCODE_HEARTBEAT.Value():
 				log.Println("Heartbeat")
 				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_HEARTBEAT_ACK.Value()})
-				break
 			case GATEWAYOPCODE_IDENTIFY.Value():
 
 				identifyPayload := IdentifyPayload{}
@@ -95,6 +96,8 @@ func (pool *Pool) Start() {
 					message.Client.Conn.Close()
 					break
 				}
+
+				message.Client.ID = user.ID
 
 				sessionId := userservices.GenerateSessionID()
 				if sessionId == "" {
@@ -156,7 +159,20 @@ func (pool *Pool) Start() {
 					ConnectedAccounts: &empty,
 				}
 				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_DISPATCH.Value(), T: "READY", D: readyPayload})
-				break
+
+				// setup event listeners
+				SetupListeners(id, message.Client)
+
+				// Events.Once("close", func(...interface{}) {
+				// 	for _, event := range message.Client.Events {
+				// 		event()
+				// 	}
+
+				// 	for _, event := range message.Client.MemberEvents {
+				// 		event()
+				// 	}
+				// })
+
 			default:
 				log.Printf("Unknown OP Code: %d", payload.Op)
 				// TODO: uncomment when all opcodes are implemented
@@ -165,8 +181,13 @@ func (pool *Pool) Start() {
 				// 	log.Println(err)
 				// }
 				// message.Client.Conn.Close()
-				break
 			}
 		}
 	}
+}
+
+func (pool *Pool) Emit(event string, data any) {
+	// for _, client := range pool.Clients {
+	// 	client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_DISPATCH.Value(), T: event, D: data})
+	// }
 }

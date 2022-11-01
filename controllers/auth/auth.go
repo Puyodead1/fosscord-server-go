@@ -8,6 +8,7 @@ import (
 	"github.com/Puyodead1/fosscord-server-go/models"
 	jwtservices "github.com/Puyodead1/fosscord-server-go/services/jwt"
 	userservices "github.com/Puyodead1/fosscord-server-go/services/user"
+	"github.com/Puyodead1/fosscord-server-go/utils"
 	fcerrors "github.com/Puyodead1/fosscord-server-go/utils/errors"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/fielderror"
 	"github.com/Puyodead1/fosscord-server-go/utils/errors/httperror"
@@ -131,7 +132,7 @@ func Register(c *gin.Context) {
 	// create a user from the request body
 	usersettings := models.UserSettings{}
 	user := models.User{
-		ID:            userservices.GenerateID(),
+		ID:            utils.GenerateID(),
 		Username:      req.Username,
 		Email:         &req.Email,
 		Password:      string(hashedPassword),

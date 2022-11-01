@@ -81,11 +81,6 @@ func GenerateDiscriminator() string {
 	return strconv.Itoa(0001 + rand.Intn(9999-0001))
 }
 
-// generates a snowflake id
-func GenerateID() string {
-	return initializers.Node.Generate().String()
-}
-
 func GenerateSessionID() string {
 	key := make([]byte, 32)
 	_, err := rand.Read(key)
