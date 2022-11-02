@@ -3,7 +3,7 @@ package models
 type ReadState struct {
 	ID                  string  `json:"id" gorm:"primaryKey;unique"`
 	ChannelID           string  `json:"channel_id" gorm:"type:string;not null;unique"`
-	Channel             Channel `gorm:"many2many:channels;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ChannelID;references:ID"`
+	Channel             Channel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ChannelID;references:ID"`
 	UserID              string  `json:"user_id" gorm:"type:string;not null;unique"`
 	User                User    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID;references:ID"`
 	LastMessageID       *string `json:"last_message_id" gorm:"type:string"`

@@ -76,6 +76,14 @@ func GetReadStates(id string) []models.ReadState {
 	return readStates
 }
 
+// get all the guilds the user is in
+func GetGuilds(id string) []models.Guild {
+	// we need to get a list of all the guilds the user is in by looking at the members table
+	var guilds []models.Guild
+	initializers.DB.Table("guilds").Preload("Members").Preload("Channels").Joins("JOIN members ON members.guild_id = guilds.id").Where("members.id = ?", id).Find(&guilds)
+	return guilds
+}
+
 // generates a random discriminator
 func GenerateDiscriminator() string {
 	return strconv.Itoa(0001 + rand.Intn(9999-0001))

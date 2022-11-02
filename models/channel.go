@@ -27,35 +27,38 @@ const (
 )
 
 type Channel struct {
-	ID                         string         `json:"id" gorm:"primaryKey"`
-	CreatedAt                  int            `json:"created_at" gorm:"type:int;not null"`
-	Name                       string         `json:"name" gorm:"type:string;not null"`
-	Icon                       string         `json:"icon" gorm:"type:string"`
-	Type                       ChannelType    `json:"type" gorm:"type:int;not null"`
-	Recipients                 *[]any         `json:"recipients" gorm:"type:string;default:[]"`
-	LastMessageID              string         `json:"last_message_id" gorm:"type:string;not null"`
-	GuildID                    *string        `json:"guild_id" gorm:"type:string"`
-	Guild                      Guild          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:GuildID;references:ID"`
-	ParentID                   *string        `json:"parent_id" gorm:"type:string"`
-	Parent                     *Channel       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ParentID;references:ID"`
-	OwnerID                    *string        `json:"owner_id" gorm:"type:string"`
-	Owner                      User           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:OwnerID;references:ID"`
-	LastPinTimestamp           *int           `json:"last_pin_timestamp" gorm:"type:int"`
-	DefaultAutoArchiveDuration int            `json:"default_auto_archive_duration" gorm:"type:int;default:3600"`
-	Position                   *int           `json:"position" gorm:"type:int"`
-	PermissionOverwrites       *[]interface{} `json:"permission_overwrites" gorm:"type:jsonb"` // TODO: struct
-	VideoQualityMode           *int           `json:"video_quality_mode" gorm:"type:int"`
-	Bitrate                    *int           `json:"bitrate" gorm:"type:int"`
-	UserLimit                  *int           `json:"user_limit" gorm:"type:int"`
-	NSFW                       bool           `json:"nsfw" gorm:"type:bool;default:false"`
-	RateLimitPerUser           *int           `json:"rate_limit_per_user" gorm:"type:int"`
-	Topic                      *string        `json:"topic" gorm:"type:string"`
+	ID                         string        `json:"id" gorm:"primaryKey"`
+	CreatedAt                  int           `json:"created_at" gorm:"type:int;not null"`
+	Name                       string        `json:"name" gorm:"type:string;not null"`
+	Icon                       string        `json:"icon" gorm:"type:string"`
+	Type                       ChannelType   `json:"type" gorm:"type:int;not null"`
+	Recipients                 []interface{} `json:"recipients"  gorm:"type:json;default:'[]'"`
+	LastMessageID              string        `json:"last_message_id" gorm:"type:string;not null"`
+	GuildID                    *string       `json:"guild_id" gorm:"type:string"`
+	Guild                      Guild         `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:GuildID;references:ID"`
+	ParentID                   *string       `json:"parent_id" gorm:"type:string"`
+	Parent                     *Channel      `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ParentID;references:ID"`
+	OwnerID                    *string       `json:"owner_id" gorm:"type:string"`
+	Owner                      User          `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:OwnerID;references:ID"`
+	LastPinTimestamp           *int          `json:"last_pin_timestamp" gorm:"type:int"`
+	DefaultAutoArchiveDuration *int          `json:"default_auto_archive_duration" gorm:"type:int"`
+	Position                   int           `json:"position" gorm:"type:int;default:0"`
+	PermissionOverwrites       []interface{} `json:"permission_overwrites" gorm:"type:json;default:'[]'"` // TODO: struct
+	VideoQualityMode           *int          `json:"video_quality_mode" gorm:"type:int"`
+	Bitrate                    int           `json:"bitrate" gorm:"type:int;default:64000"`
+	UserLimit                  int           `json:"user_limit" gorm:"type:int;default:0"`
+	NSFW                       bool          `json:"nsfw" gorm:"type:bool;default:false"`
+	RateLimitPerUser           int           `json:"rate_limit_per_user" gorm:"type:int;default=0"`
+	Topic                      *string       `json:"topic" gorm:"type:string"`
 	// Invites                       *[]interface{} `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID"` // TODO: struct
 	RetentionPolicyID *string `json:"retention_policy_id" gorm:"type:string"`
 	// Messages                      []interface{}  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID"`
 	// VoiceStates                   []interface{}  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID"` // TODO: struct
-	ReadStates []ReadState `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	ReadStates []ReadState `json:"-" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ChannelID"`
 	// Webhooks                      []interface{}  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:ID"` // TODO: struct
 	Flags                         int  `json:"flags" gorm:"type:int;not null;default:0"`
 	DefaultThreadRateLimitPerUser *int `json:"default_thread_rate_limit_per_user" gorm:"type:int;not null;default:0"`
+	// DefaultReactionEmoji 		*[]interface{} `json:"default_reaction_emoji" gorm:"type:jsonb"` // TODO: what is the type
+	DefaultSortOrder *int          `json:"default_sort_order" gorm:"type:int"`
+	AvailableTags    []interface{} `json:"available_tags"  gorm:"type:json;default:'[]'"`
 }

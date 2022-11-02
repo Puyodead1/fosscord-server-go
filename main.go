@@ -17,6 +17,7 @@ import (
 	"github.com/Puyodead1/fosscord-server-go/gateway"
 	"github.com/Puyodead1/fosscord-server-go/initializers"
 	"github.com/Puyodead1/fosscord-server-go/middleware"
+	"github.com/Puyodead1/fosscord-server-go/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -24,7 +25,7 @@ import (
 func Init() {
 	// Connect to database
 	initializers.InitDatabase()
-	initializers.InitSnowflake()
+	utils.InitSnowflake()
 	binding.Validator = new(initializers.DefaultValidator)
 }
 

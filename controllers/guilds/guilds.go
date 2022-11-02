@@ -61,17 +61,9 @@ func CreateGuild(c *gin.Context) {
 	// TODO: check the users max guilds
 
 	guild := models.Guild{
-		ID:          utils.GenerateID(),
-		Name:        req.Name,
-		OwnerID:     c.GetString("CurrentUserID"),
-		Channels:    make([]models.Channel, 0),
-		Bans:        make([]interface{}, 0),
-		Roles:       make([]interface{}, 0),
-		Emojis:      make([]interface{}, 0),
-		Stickers:    make([]interface{}, 0),
-		Invites:     make([]interface{}, 0),
-		VoiceStates: make([]interface{}, 0),
-		Webhooks:    make([]interface{}, 0),
+		ID:      utils.GenerateID(),
+		Name:    req.Name,
+		OwnerID: c.GetString("CurrentUserID"),
 	}
 	if req.Icon != nil {
 		guild.Icon = req.Icon

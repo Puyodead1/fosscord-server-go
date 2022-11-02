@@ -134,29 +134,29 @@ func (pool *Pool) Start() {
 					readStateEntries[i] = readState.ChannelID
 				}
 
-				empty := make([]any, 0)
+				guilds := userservices.GetGuilds(id)
 
 				readyPayload := ReadyEventPayload{
 					V:                9,
 					User:             user,
-					PrivateChannels:  empty,
+					PrivateChannels:  make([]interface{}, 0),
 					SessionID:        sessionId,
-					Guilds:           empty,
+					Guilds:           guilds,
 					UserSettings:     &userSettings,
-					Users:            &empty,
-					Experiments:      &empty,
-					GuildExperiments: &empty,
+					Users:            make([]interface{}, 0),
+					Experiments:      make([]interface{}, 0),
+					GuildExperiments: make([]interface{}, 0),
 					ReadState: &ReadyEventDataStruct1{
 						Entries: readStateEntries,
 						Version: 304128,
 						Partial: false,
 					},
 					UserGuildSettings: &ReadyEventDataStruct1{
-						Entries: empty,
+						Entries: make([]interface{}, 0),
 						Version: 642,
 						Partial: false,
 					},
-					ConnectedAccounts: &empty,
+					ConnectedAccounts: make([]interface{}, 0),
 				}
 				message.Client.Conn.WriteJSON(GatewayPayload{Op: GATEWAYOPCODE_DISPATCH.Value(), T: "READY", D: readyPayload})
 

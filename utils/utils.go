@@ -1,8 +1,20 @@
 package utils
 
-import "github.com/Puyodead1/fosscord-server-go/initializers"
+import (
+	"github.com/bwmarrin/snowflake"
+)
+
+var Node *snowflake.Node
+
+func InitSnowflake() {
+	var err error
+	Node, err = snowflake.NewNode(1)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // generates a snowflake id
 func GenerateID() string {
-	return initializers.Node.Generate().String()
+	return Node.Generate().String()
 }

@@ -46,28 +46,23 @@ func AddToGuild(user_id string, guild_id string) error {
 	if guild.ID == "" {
 		return fmt.Errorf("guild not found")
 	}
-	guild.Channels = make([]models.Channel, 0)
-	guild.Bans = make([]interface{}, 0)
-	guild.Roles = make([]interface{}, 0)
-	guild.Emojis = make([]interface{}, 0)
-	guild.Stickers = make([]interface{}, 0)
-	guild.Invites = make([]interface{}, 0)
-	guild.VoiceStates = make([]interface{}, 0)
-	guild.Webhooks = make([]interface{}, 0)
-	guild.Members = make([]models.Member, 0)
+	// guild.Bans = make([]interface{}, 0)
+	// guild.Emojis = make([]interface{}, 0)
+	// guild.Stickers = make([]interface{}, 0)
+	// guild.Invites = make([]interface{}, 0)
+	// guild.VoiceStates = make([]interface{}, 0)
+	// guild.Webhooks = make([]interface{}, 0)
 
 	if IsInGuild(user_id, guild_id) {
 		return fmt.Errorf("user is already in guild")
 	}
 
-	emptyStr := ""
 	member := models.Member{
 		ID:      user_id,
 		GuildID: guild_id,
 		// TODO: @everyone role
 		JoinedAt: time.Now().String(),
 		Pending:  false,
-		Bio:      &emptyStr,
 	}
 
 	guild.MemberCount++
